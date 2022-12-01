@@ -1,0 +1,11 @@
+title="Multi monitor"
+
+[endpoint.1]
+title="My Endpoint"
+network_id=1
+url="http://1.geth.testnet.golem.network:55555"
+
+[endpoint.2]
+title="My Endpoint 2"
+network_id=1
+url="http://1.geth.testnet.golem.network:55555"
