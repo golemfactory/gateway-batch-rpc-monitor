@@ -3,7 +3,7 @@
 import os
 from setuptools import setup
 import re
-VERSION_FILE = "batch_rpc_provider/_version.py"
+VERSION_FILE = "batch_rpc_monitor/_version.py"
 ver_str_line = open(VERSION_FILE, "rt").read()
 VS_RE = r"^__version__ = ['\"]([^'\"]*)['\"]"
 mo = re.search(VS_RE, ver_str_line, re.M)
@@ -18,11 +18,11 @@ if github_version == "v" + ver_str:
 else:
     raise RuntimeError(f"Version in _version.py does not match the tag name (v{ver_str} != {github_version})")
 
-setup(name='batch_rpc_provider',
+setup(name='batch_rpc_monitor',
       version=ver_str,
       # list folders, not files
-      packages=['batch_rpc_provider'],
-      scripts=['batch_rpc_provider/batch_rpc_provider.py', 'batch_rpc_provider/__init__.py'],
+      packages=['batch_rpc_monitor'],
+      scripts=['batch_rpc_monitor/batch_rpc_monitor.py', 'batch_rpc_monitor/__main__.py'],
       author='Sieciech Czajka',
       author_email='sieciech.czajka@golem.network',
       url='https://github.com/scx1332/batch-rpc-monitor',
