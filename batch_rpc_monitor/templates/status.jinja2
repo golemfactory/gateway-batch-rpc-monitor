@@ -9,6 +9,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
 </head>
 <style>
+    table {
+        font-size: 14px;
+    }
     .success {
         color: green;
     }
@@ -19,7 +22,7 @@
         color: red;
     }
     tr.warning td {
-        background-color: yellow;
+        background-color: palegoldenrod;
         color: black;
     }
     tr.error td {
@@ -27,7 +30,7 @@
         color: white;
     }
     tr.success td {
-        background-color: green;
+        background-color: lightgreen;
         color: black;
     }
     table {
@@ -57,10 +60,12 @@
     {% set current = status.current %}
     {% set stats = status.stats %}
     <div style="border: 1px solid black; float: left; padding: 5px; margin: 5px;">
-        <h5>{{ endpoint.title }}</h5>
-        <p>Last check result: <span class="{{stats.last_result}}">{{stats.last_result}}</span></p>
-        <p>Last success: <span class="{{stats.last_result}}"> {{stats.last_success}}</span></p>
-        <a class="btn btn-secondary" data-bs-toggle="collapse" href="#collapse_btn_{{ endpoint_idx }}" role="button" aria-expanded="false" aria-controls="collapse_btn_{{ endpoint_idx }}">Toggle {{ endpoint.title }}</a>
+        <h5 style="font-size: 15px;">{{ endpoint.title }}</h5>
+        <div>
+            <div style="font-size: 14px;">Last check result: <span class="{{stats.last_result}}">{{stats.last_result}}</span></div>
+            <div style="font-size: 14px;">Last block: <span class="{{stats.last_result}}">{{current.block_age}}s</span></div>
+        </div>
+        <a class="btn" style="background-color: aqua;" data-bs-toggle="collapse" href="#collapse_btn_{{ endpoint_idx }}" role="button" aria-expanded="false" aria-controls="collapse_btn_{{ endpoint_idx }}">Toggle {{ endpoint.title }}</a>
     </div>
 {% endfor %}
 <div style="clear:both;"></div>
@@ -69,50 +74,54 @@
     {% set endpoint = config.endpoint[endpoint_idx] %}
     {% set status = status[endpoint_idx] %}
 
-    <div style="background-color: aliceblue; margin: 10px; padding: 5px; border: 1px solid gray">
+    <div style="background-color: #eeeeee; margin: 10px; padding: 5px; border: 1px solid gray">
         <div class="collapse multi-collapse show" id="collapse_btn_{{ endpoint_idx }}">
             <div>
-                <h3>Current status: {{ endpoint.title }}</h3>
-                <p>{{ endpoint.url }}</p>
-                <p>{{ status.info }}</p>
+                <h4 style="padding: 10px;">Current status: {{ endpoint.title }}</h4>
 
                 {% set current = status.current %}
                 {% set stats = status.stats %}
 
-                <p>Elapsed since last check: {{current.call_age}}s</p>
-
-                <p>Last check result: <span class="{{stats.last_result}}">{{stats.last_result}}</span></p>
-                <p>Last success: <span class="{{stats.last_result}}"> {{stats.last_success}}</span></p>
-                <p>Block age: {{current.block_age}}s</p>
-                <p>Last error time: <span class="error">{{stats.last_err_time}}</span></p>
-                <p>Last error: <span class="error">{{stats.last_err}}</span></p>
+                <div style="float: left;padding: 5px;">
+                    <div style="background-color: white;padding: 10px;border: 1px solid gray">
+                        <p>{{ endpoint.url }}</p>
+                        <div>Elapsed since last check: {{current.call_age}}s</div>
+                        <div>Last check result: <span class="{{stats.last_result}}">{{stats.last_result}}</span></div>
+                        <div>Last success: <span class="{{stats.last_result}}"> {{stats.last_success}}</span></div>
+                        <div>Block age: {{current.block_age}}s</div>
+                        <div>Last error time: <span class="error">{{stats.last_err_time}}</span></div>
+                        <div>Last error: <span class="error">{{stats.last_err}}</span></div>
+                    </div>
+                </div>
 
                 {% for hist in current.history  %}
-                    <div style="float: left; margin: 10px;">
-                        <h2>Last calls buckets ({{ hist.title }})</h2>
-                        <div style="height: 200px; overflow-y: scroll;">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Time</th>
-                                        <th>Total checks</th>
-                                        <th>Failed checks</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {% for el in hist.hist %}
-                                    <tr class="{{ el.class }}">
-                                        <td>{{el.time}}</td>
-                                        <td>{{el.requests}}</td>
-                                        {% if el.failures > 0 %}
-                                            <td class="failure">{{el.failures}}</td>
-                                        {% else %}
-                                            <td >{{el.failures}}</td>
-                                        {% endif %}
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
+                    <div style="float: left;padding: 5px;">
+                        <div style="background-color: white;padding: 10px;border: 1px solid gray">
+                            <h5>Last calls buckets ({{ hist.title }})</h5>
+                            <div style="height: 200px; overflow-y: scroll;">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Time</th>
+                                            <th>Total checks</th>
+                                            <th>Failed checks</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for el in hist.hist %}
+                                        <tr class="{{ el.class }}">
+                                            <td>{{el.time}}</td>
+                                            <td>{{el.requests}}</td>
+                                            {% if el.failures > 0 %}
+                                                <td class="failure">{{el.failures}}</td>
+                                            {% else %}
+                                                <td >{{el.failures}}</td>
+                                            {% endif %}
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}
