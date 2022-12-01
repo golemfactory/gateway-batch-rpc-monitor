@@ -16,10 +16,18 @@ logger.setLevel(logging.DEBUG)
 parser = argparse.ArgumentParser(description='Golem multi monitor')
 parser.add_argument('--config_file', dest="config_file", type=str, help='Location of config', default="config-dev.toml")
 
+async def worker_loop(config, entry):
+    while True:
+        endpoint = config['endpoint'][entry]
+        logger.info(f"Worker loop {endpoint} ...")
+        await asyncio.sleep(1)
 
 async def main_loop(config):
+    for entry in config['endpoint']:
+        asyncio.create_task(worker_loop(config, entry))
+
     while True:
-        logger.info("Checking ...")
+        logger.info("Main loop ...")
         await asyncio.sleep(1)
 
 
