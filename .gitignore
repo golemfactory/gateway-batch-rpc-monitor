@@ -1,0 +1,12 @@
+dist
+build
+.idea
+
+*.pyc
+*.egg-info
+/requirements.txt
+/test2.py
+/blocks.txt
+/build.bat
+/publish.bat
+/test.py
