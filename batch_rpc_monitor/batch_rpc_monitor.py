@@ -3,7 +3,7 @@ import asyncio
 import time
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 import aiohttp
 import aiohttp_jinja2
@@ -171,24 +171,33 @@ async def status_endpoint(request):
         hist_hours = get_history(status['stats']['client_info'].time_buckets_hours["test"], "Hours")
         hist_days = get_history(status['stats']['client_info'].time_buckets_days["test"], "Days")
 
-        if len(hist_hours) > 0:
-            last_hour_errors = hist_hours['hist'][0]['failures']
-            last_hour_requests = hist_hours['hist'][0]['requests']
-        else:
-            last_hour_errors = "N/A"
-            last_hour_requests = "N/A"
-        if len(hist_minutes) > 0:
-            last_minute_errors = hist_minutes['hist'][0]['failures']
-            last_minute_requests = hist_minutes['hist'][0]['requests']
-        else:
-            last_minute_errors = "N/A"
-            last_minute_requests = "N/A"
-        if len(hist_days) > 0:
-            last_day_errors = hist_days['hist'][0]['failures']
-            last_day_requests = hist_days['hist'][0]['requests']
-        else:
-            last_day_errors = "N/A"
-            last_day_requests = "N/A"
+        dt = datetime.now(timezone.utc)
+        minute_ago_str = (dt - timedelta(minutes=1)).strftime("%Y-%m-%dT%H:%M:%S")
+        hour_ago_str = (dt - timedelta(hours=1)).strftime("%Y-%m-%dT%H:%M:%S")
+        days_ago_str = (dt - timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%S")
+        last_minute_errors = 0
+        last_minute_requests = 0
+        for i in range(0, len(hist_seconds['hist'])):
+            if hist_seconds['hist'][i]['time'] < minute_ago_str:
+                break
+            last_minute_errors += hist_seconds['hist'][i]['failures']
+            last_minute_requests += hist_seconds['hist'][i]['requests']
+
+        last_hour_errors = 0
+        last_hour_requests = 0
+        for i in range(0, len(hist_minutes['hist'])):
+            if hist_minutes['hist'][i]['time'] < hour_ago_str:
+                break
+            last_hour_errors += hist_minutes['hist'][i]['failures']
+            last_hour_requests += hist_minutes['hist'][i]['requests']
+
+        last_day_errors = 0
+        last_day_requests = 0
+        for i in range(0, len(hist_hours['hist'])):
+            if hist_hours['hist'][i]['time'] < days_ago_str:
+                break
+            last_day_errors += hist_hours['hist'][i]['failures']
+            last_day_requests += hist_hours['hist'][i]['requests']
 
         last_status = status['stats']['last_result']
         status["current"] = {
