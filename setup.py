@@ -13,10 +13,13 @@ else:
     raise RuntimeError("Unable to find version string in %s." % (VERSION_FILE,))
 
 github_version = os.environ.get('GITHUB_RELEASE_VER')
-if github_version == "v" + ver_str:
-    print("Version in _version.py matches the tag name")
+if github_version:
+    if github_version == "v" + ver_str:
+        print("Version in _version.py matches the tag name")
+    else:
+        raise RuntimeError(f"Version in _version.py does not match the tag name (v{ver_str} != {github_version})")
 else:
-    raise RuntimeError(f"Version in _version.py does not match the tag name (v{ver_str} != {github_version})")
+    print("No GITHUB_RELEASE_VER env variable, skipping version check")
 
 setup(name='batch_rpc_monitor',
       version=ver_str,
