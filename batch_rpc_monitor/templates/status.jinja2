@@ -48,19 +48,28 @@
         font-size: 1.1em;
     }
     .small-info-box {
-        border: 1px solid black;
+        border: 1px solid #dddddd;
         padding: 5px;
         margin: 10px;
-        width: 200px;
+        width: 170px;
+    }
+
+    table.small-info tbody tr:first-child td {
+        border-top: 0px solid #dddddd;
+    }
+    table.small-info tbody tr:first-child th {
+        border-top: 0px solid #dddddd;
     }
     table.small-info tbody tr td {
-        border: 1px solid gray;
+        border: 0px solid gray;
+        border-top: 1px solid #dddddd;
         padding: 5px;
         text-align: center;
-
+        width: 35px;
     }
     table.small-info tbody tr th {
-        border: 1px solid gray;
+        border: 0px solid gray;
+        border-top: 1px solid #dddddd;
         padding: 5px;
         text-align: right;
         font-size: 11px;
@@ -81,23 +90,28 @@
 </style>
 <body>
     <div style="padding: 10px;">
-        <h2>{{config.title}}</h2>
-        <a class="btn btn-primary" href="/">Home</a> <a class="btn btn-primary disabled">Status</a>
-    </div>
-    <div>
-        <div class="small-info-box">
-            <a class="btn-custom" data-bs-toggle="collapse" data-bs-target=".multi-collapse" href="#collapse_btn" role="button" aria-expanded="false" aria-controls="collapse_btn">Toggle all</a>
+        <div style="float:left; height: 20px;">
+            <a class="btn btn-primary" href="/">Home</a> <a class="btn btn-primary disabled">Status</a>
         </div>
+        <div style="float:left; margin-left: 10px; height: 20px; padding: 5px;">
+            <h5>{{config.title}}</h5>
+        </div>
+        <div style="clear:both;"></div>
+    </div>
+    <hr>
+    <div style="margin-top: -10px;">
         {% for endpoint_idx in config.endpoint  %}
             {% set endpoint = config.endpoint[endpoint_idx] %}
             {% set status = status[endpoint_idx] %}
             {% set current = status.current %}
             {% set stats = status.stats %}
             <div class="small-info-box" style="float: left;">
-                <h5 style="font-size: 15px;">{{ endpoint.title }}</h5>
+                <h5 style="font-size: 15px; padding-left: 4px;">{{ endpoint.title }}</h5>
                 <div>
-                    <div style="font-size: 14px;">Last check: <span class="info-bold {{current.last_status}}">{{current.last_status}}</span></div>
-                    <div style="font-size: 14px;">Last block: <span class="info-bold {{current.last_status}}">{{current.block_age}}s</span></div>
+                    <div style="background-color: #eeeeee; padding: 5px;">
+                        <div title="Last check result" style="font-size: 14px; display: inline-block;"><span class="info-bold {{current.last_status}}">{{current.last_status}}</span></div>
+                        <div title="Last block seconds ago" style="font-size: 14px; float: right; margin-right: 5px;"><span class="info-bold {{current.last_status}}">{{current.block_age}}s</span></div>
+                    </div>
                     <table class="small-info">
                         <tbody>
                             <tr>
@@ -135,13 +149,16 @@
             </div>
         {% endfor %}
         <div style="clear:both;"></div>
+        <div style="width: auto; padding-left: 15px;">
+            <a class="btn-custom" data-bs-toggle="collapse" data-bs-target=".multi-collapse" href="#collapse_btn" role="button" aria-expanded="false" aria-controls="collapse_btn">Toggle all details</a>
+        </div>
     </div>
     {% for endpoint_idx in config.endpoint  %}
         {% set endpoint = config.endpoint[endpoint_idx] %}
         {% set status = status[endpoint_idx] %}
 
-        <div style="background-color: #eeeeee; margin: 10px; padding: 5px; border: 1px solid gray">
-            <div class="collapse multi-collapse show" id="collapse_btn_{{ endpoint_idx }}">
+        <div style="background-color: #eeeeee; margin: 10px">
+            <div class="collapse multi-collapse" id="collapse_btn_{{ endpoint_idx }}">
                 <div>
                     <h4 style="padding: 10px;">Current status: {{ endpoint.title }}</h4>
 
