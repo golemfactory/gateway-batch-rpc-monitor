@@ -1,9 +1,25 @@
 # batch-rpc-monitor
 
-Package on pypi.org: [batch-rpc-monitor](https://pypi.org/project/batch-rpc-monitor/) 
+Tool for monitoring web3 RPC endpoints
 
+## How to run 
 
-Tool for monitoring endpoints
+1. Prepare .env file with following variables:
 
-## Installation
+```
+EXTERNAL_PORT=15774
+```
 
+2. Build docker image
+
+```
+docker-compose build
+```
+
+3. Prepare config.toml file in the conf directory based on config-dev.toml
+
+4. Run docker container
+
+```
+docker-compose up -d
+```

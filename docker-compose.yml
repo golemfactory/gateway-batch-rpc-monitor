@@ -1,0 +1,10 @@
+services:
+  monitor:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python -m batch_rpc_monitor --config-file /conf/config.toml
+    volumes:
+      - ./conf:/conf
+    ports:
+      - '${EXTERNAL_PORT}:8080'

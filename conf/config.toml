@@ -1,0 +1,33 @@
+title="Multi monitor"
+
+[endpoint.1]
+title="Golem-Rinkeby"
+network_id=4
+url="http://1.geth.testnet.golem.network:55555"
+request_burst=5
+token_holder="0x82f67958a5474e40e1485742d648c0b0686b6e5d"
+token_address="0xd94e3DC39d4Cad1DAd634e7eb585A57A19dC7EFE"
+
+[endpoint.2]
+title="Matic mumbai"
+network_id=80001
+url="https://rpc-mumbai.matic.today/"
+request_burst=5
+token_holder="0xc596aee002ebe98345ce3f967631aaf79cfbdf41"
+token_address="0x2036807B0B3aaf5b1858EE822D0e111fDdac7018"
+
+[endpoint.3]
+title="Goerli"
+network_id=5
+url="https://ethereum-goerli-rpc.allthatnode.com"
+request_burst=5
+token_holder="0xdd6596f2029e6233deffaca316e6a95217d4dc34"
+token_address="0x33Af15C79d64B85bA14AafFaa4577949104b22e8"
+
+[endpoint.4]
+title="Polygon RPC"
+network_id=137
+url="https://polygon-rpc.com/"
+request_burst=5
+token_holder="0x52a258ed593c793251a89bfd36cae158ee9fc4f8"
+token_address="0x0B220b82F3eA3B7F6d9A1D8ab58930C064A2b5Bf"

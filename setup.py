@@ -25,14 +25,19 @@ setup(name='batch_rpc_monitor',
       version=ver_str,
       # list folders, not files
       packages=['batch_rpc_monitor'],
-      scripts=['batch_rpc_monitor/batch_rpc_monitor.py', 'batch_rpc_monitor/__main__.py'],
+      scripts=['batch_rpc_monitor/__main__.py'],
       author='Sieciech Czajka',
       author_email='sieciech.czajka@golem.network',
       url='https://github.com/scx1332/batch-rpc-monitor',
       download_url='https://github.com/scx1332/batch-rpc-monitor/archive/refs/tags/{github_version}.tar.gz',
       keywords=['MultiCall', 'json-rpc', 'web3'],
       install_requires=[
-          'aiohttp',
+          'aiohttp>=3.8.3',
+          'aiohttp_jinja2>=1.5',
+          'batch_rpc_provider>=1.2.1',
+          'dataclasses_json>=0.5.7',
+          'Jinja2>=3.1.2',
+          'toml>=0.10.2'
       ],
       classifiers=[
           'Development Status :: 3 - Alpha',

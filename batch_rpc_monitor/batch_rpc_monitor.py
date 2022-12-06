@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 parser = argparse.ArgumentParser(description='Golem multi monitor')
-parser.add_argument('--config_file', dest="config_file", type=str, help='Location of config', default="config-dev.toml")
+parser.add_argument('--config-file', dest="config_file", type=str, help='Location of config', default="config-dev.toml")
 
 
 async def burst_call(context, target_url, token_holder, token_address, number_calls):
