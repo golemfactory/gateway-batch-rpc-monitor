@@ -1,0 +1,6 @@
+aiohttp>=3.8.3
+aiohttp_jinja2>=1.5
+batch_rpc_provider>=1.2.1
+dataclasses_json>=0.5.7
+Jinja2>=3.1.2
+toml>=0.10.2
