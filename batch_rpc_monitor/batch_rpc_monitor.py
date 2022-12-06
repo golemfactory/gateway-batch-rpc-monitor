@@ -112,7 +112,7 @@ async def worker_loop(context, entry):
         except Exception as ex:
             logger.error(f"Exception in worker loop: {ex}")
 
-        await asyncio.sleep(1)
+        await asyncio.sleep(20)
 
 
 async def main_loop(context):
@@ -121,7 +121,7 @@ async def main_loop(context):
         asyncio.create_task(worker_loop(context, entry))
 
     while True:
-        logger.info("Main loop ...")
+        # logger.info("Main loop ...")
         await asyncio.sleep(1)
 
 
@@ -135,13 +135,7 @@ async def index(request):
 
 
 @routes.get('/status')
-async def index(request):
-    context = request.app['context']
-    return aiohttp_jinja2.render_template('status.jinja2', request, context)
-
-
-@routes.get('/status2')
-async def hello(request):
+async def status_endpoint(request):
     context = request.app['context']
 
     def get_history(buckets, title):
