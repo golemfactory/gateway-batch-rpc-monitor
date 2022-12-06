@@ -43,6 +43,41 @@
     td {
         padding: 5px;
     }
+    .info-bold {
+        font-weight: bold;
+        font-size: 1.1em;
+    }
+    .small-info-box {
+        border: 1px solid black;
+        padding: 5px;
+        margin: 10px;
+        width: 200px;
+    }
+    table.small-info tbody tr td {
+        border: 1px solid gray;
+        padding: 5px;
+        text-align: center;
+
+    }
+    table.small-info tbody tr th {
+        border: 1px solid gray;
+        padding: 5px;
+        text-align: right;
+        font-size: 11px;
+    }
+    .btn-custom {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 5px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 11px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
 </style>
 <body>
     <div style="padding: 10px;">
@@ -50,21 +85,53 @@
         <a class="btn btn-primary" href="/">Home</a> <a class="btn btn-primary disabled">Status</a>
     </div>
     <div>
-        <div style="border: 1px solid black; float: left; padding: 5px; margin: 5px;">
-            <a class="btn btn-secondary" data-bs-toggle="collapse" data-bs-target=".multi-collapse" href="#collapse_btn" role="button" aria-expanded="false" aria-controls="collapse_btn">Toggle all</a>
+        <div class="small-info-box">
+            <a class="btn-custom" data-bs-toggle="collapse" data-bs-target=".multi-collapse" href="#collapse_btn" role="button" aria-expanded="false" aria-controls="collapse_btn">Toggle all</a>
         </div>
         {% for endpoint_idx in config.endpoint  %}
             {% set endpoint = config.endpoint[endpoint_idx] %}
             {% set status = status[endpoint_idx] %}
             {% set current = status.current %}
             {% set stats = status.stats %}
-            <div style="border: 1px solid black; float: left; padding: 5px; margin: 5px;">
+            <div class="small-info-box" style="float: left;">
                 <h5 style="font-size: 15px;">{{ endpoint.title }}</h5>
                 <div>
-                    <div style="font-size: 14px;">Last check result: <span class="{{stats.last_result}}">{{stats.last_result}}</span></div>
-                    <div style="font-size: 14px;">Last block: <span class="{{stats.last_result}}">{{current.block_age}}s</span></div>
+                    <div style="font-size: 14px;">Last check: <span class="info-bold {{current.last_status}}">{{current.last_status}}</span></div>
+                    <div style="font-size: 14px;">Last block: <span class="info-bold {{current.last_status}}">{{current.block_age}}s</span></div>
+                    <table class="small-info">
+                        <tbody>
+                            <tr>
+                                <th>
+                                    Success
+                                </th>
+                                <td>
+                                    <span title="Successes in last minute">{{current.last_minute_requests}}</span>
+                                </td>
+                                <td>
+                                    <span title="Successes in last hour">{{current.last_hour_requests}}</span>
+                                </td>
+                                <td>
+                                    <span title="Successes in last day">{{current.last_day_requests}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Failures
+                                </th>
+                                <td>
+                                    <span title="Errors in last minute" class="info-bold {{current.last_minute_error_class}}">{{current.last_minute_errors}}</span>
+                                </td>
+                                <td>
+                                    <span title="Errors in last hour" class="info-bold {{current.last_hour_error_class}}">{{current.last_hour_errors}}</span>
+                                </td>
+                                <td>
+                                    <span title="Errors in last day" class="info-bold {{current.last_day_error_class}}">{{current.last_day_errors}}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <a class="btn" style="background-color: aqua;" data-bs-toggle="collapse" href="#collapse_btn_{{ endpoint_idx }}" role="button" aria-expanded="false" aria-controls="collapse_btn_{{ endpoint_idx }}">Toggle {{ endpoint.title }}</a>
+                <a class="btn-custom" data-bs-toggle="collapse" href="#collapse_btn_{{ endpoint_idx }}" role="button" aria-expanded="false" aria-controls="collapse_btn_{{ endpoint_idx }}">Details</a>
             </div>
         {% endfor %}
         <div style="clear:both;"></div>
@@ -85,7 +152,7 @@
                         <div style="background-color: white;padding: 10px;border: 1px solid gray">
                             <p>{{ endpoint.url }}</p>
                             <div>Elapsed since last check: {{current.call_age}}s</div>
-                            <div>Last check result: <span class="{{stats.last_result}}">{{stats.last_result}}</span></div>
+                            <div>Last check: <span class="{{stats.last_result}}">{{stats.last_result}}</span></div>
                             <div>Last success: <span class="{{stats.last_result}}"> {{stats.last_success}}</span></div>
                             <div>Block age: {{current.block_age}}s</div>
                             <div>Last error time: <span class="error">{{stats.last_err_time}}</span></div>

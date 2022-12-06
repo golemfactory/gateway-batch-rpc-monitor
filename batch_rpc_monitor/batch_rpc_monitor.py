@@ -171,10 +171,40 @@ async def status_endpoint(request):
         hist_hours = get_history(status['stats']['client_info'].time_buckets_hours["test"], "Hours")
         hist_days = get_history(status['stats']['client_info'].time_buckets_days["test"], "Days")
 
+        if len(hist_hours) > 0:
+            last_hour_errors = hist_hours['hist'][0]['failures']
+            last_hour_requests = hist_hours['hist'][0]['requests']
+        else:
+            last_hour_errors = "N/A"
+            last_hour_requests = "N/A"
+        if len(hist_minutes) > 0:
+            last_minute_errors = hist_minutes['hist'][0]['failures']
+            last_minute_requests = hist_minutes['hist'][0]['requests']
+        else:
+            last_minute_errors = "N/A"
+            last_minute_requests = "N/A"
+        if len(hist_days) > 0:
+            last_day_errors = hist_days['hist'][0]['failures']
+            last_day_requests = hist_days['hist'][0]['requests']
+        else:
+            last_day_errors = "N/A"
+            last_day_requests = "N/A"
+
+        last_status = status['stats']['last_result']
         status["current"] = {
-           "block_age": int(time.time()) - status['stats']["block_timestamp"] if "block_timestamp" in status['stats'] else 0,
-           "call_age": int(time.time()) - int(status['stats']["last_call"].timestamp()),
-           "history": [hist_seconds, hist_minutes, hist_hours, hist_days],
+            "last_status": last_status,
+            "block_age": int(time.time()) - status['stats']["block_timestamp"] if "block_timestamp" in status['stats'] else 0,
+            "call_age": int(time.time()) - int(status['stats']["last_call"].timestamp()),
+            "last_day_requests": last_day_requests,
+            "last_day_errors": last_day_errors,
+            "last_day_error_class": "failure" if last_day_errors != 0 else "success",
+            "last_hour_requests": last_hour_requests,
+            "last_hour_errors": last_hour_errors,
+            "last_hour_error_class": "failure" if last_hour_errors != 0 else "success",
+            "last_minute_requests": last_minute_requests,
+            "last_minute_errors": last_minute_errors,
+            "last_minute_error_class": "failure" if last_minute_errors != 0 else "success",
+            "history": [hist_seconds, hist_minutes, hist_hours, hist_days],
         }
     response = aiohttp_jinja2.render_template('status.jinja2',
                                               request,

@@ -115,7 +115,6 @@ class ClientCollection:
         return self.clients.get(api_key)
 
 
-
 if __name__ == "__main__":
     c = ClientInfo(networks={})
     c.networks["polygon"] = ClientNetworkInfo(request_count=10, request_failed_count=2, request_backup_count=3)
