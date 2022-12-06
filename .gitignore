@@ -1,11 +1,14 @@
 dist
 build
 
-*.pyc
-*.egg-info
+/conf/config.toml
+
 /requirements.txt
 /test2.py
 /blocks.txt
 /build.bat
 /publish.bat
 /test.py
+
+*.pyc
+*.egg-info
