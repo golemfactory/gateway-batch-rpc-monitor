@@ -2,7 +2,13 @@
 
 Tool for monitoring web3 RPC endpoints
 
-## How to run 
+## How to run locally
+
+1. python -m batch_rpc_monitor --config-file config-dev.toml
+
+if you are missing any dependencies, you can install them from requirements.txt
+
+## How to run in docker
 
 1. Prepare .env file with following variables:
 
