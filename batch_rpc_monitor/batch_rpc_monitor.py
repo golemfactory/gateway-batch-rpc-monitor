@@ -215,7 +215,10 @@ async def status_endpoint(request):
             "last_minute_error_class": "failure" if last_minute_errors != 0 else "success",
             "history": [hist_seconds, hist_minutes, hist_hours, hist_days],
         }
-    response = aiohttp_jinja2.render_template('status.jinja2',
+    if 'json' in request.query:
+        response = aiohttp.web.json_response(context['status'])
+    else:
+        response = aiohttp_jinja2.render_template('status.jinja2',
                                               request,
                                               context
                                               )
