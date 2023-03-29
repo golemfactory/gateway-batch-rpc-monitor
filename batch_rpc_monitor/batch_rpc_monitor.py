@@ -216,7 +216,26 @@ async def status_endpoint(request):
             "history": [hist_seconds, hist_minutes, hist_hours, hist_days],
         }
     if 'json' in request.query:
-        response = aiohttp.web.json_response(context['status'])
+        response = aiohttp.web.json_response([[i, context['status'][i]['current']] for i in context['status']])
+    elif 'muninconfig' in request.query:
+        response_lines = []
+        response_lines.append("graph_title Batch RPC endpoint")
+        response_lines.append("graph_vlabel seconds")
+        for endpoint_label in context['status']:
+            response_lines.append(f"{endpoint_label}_call_age.label {endpoint_label} last check")
+            response_lines.append(f"{endpoint_label}_call_age.warning 60")
+            response_lines.append(f"{endpoint_label}_call_age.critical 1800")
+            response_lines.append(f"{endpoint_label}_block_age.label {endpoint_label} last block")
+            response_lines.append(f"{endpoint_label}_block_age.warning 120")
+            response_lines.append(f"{endpoint_label}_block_age.critical 600")
+        response = aiohttp.web.Response(text="\n".join(response_lines))
+    elif 'munin' in request.query:
+        response_lines = []
+        for endpoint_label in context['status']:
+            current_endpoint = context['status'][endpoint_label]['current']
+            response_lines.append(f"{endpoint_label}_call_age.value {current_endpoint['call_age']}")
+            response_lines.append(f"{endpoint_label}_block_age.value {current_endpoint['block_age']}")
+        response = aiohttp.web.Response(text="\n".join(response_lines))
     else:
         response = aiohttp_jinja2.render_template('status.jinja2',
                                               request,
