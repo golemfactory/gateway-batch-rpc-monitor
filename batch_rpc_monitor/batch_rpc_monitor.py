@@ -240,8 +240,8 @@ async def status_endpoint(request):
     elif 'prometheus' in request.query:
         for endpoint_label in context['status']:
             current_endpoint = context['status'][endpoint_label]['current']
-            call_gauge = prometheus_client.Gauge(f"{endpoint_label}_call_age", "Seconds since last check")
-            block_gauge = prometheus_client.Gauge(f"{endpoint_label}_block_age", "Latest block age")
+            call_gauge = prometheus_client.Gauge(f"{endpoint_label.replace('-', '_')}_call_age", "Seconds since last check")
+            block_gauge = prometheus_client.Gauge(f"{endpoint_label.replace('-', '_')}_block_age", "Latest block age")
             call_gauge.set(current_endpoint['call_age'])
             block_gauge.set(current_endpoint['block_age'])
         response = aiohttp.web.Response(body=prometheus_client.generate_latest())
