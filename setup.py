@@ -37,10 +37,11 @@ setup(name='batch_rpc_monitor',
           'batch_rpc_provider>=1.2.1',
           'dataclasses_json>=0.5.7',
           'Jinja2>=3.1.2',
-          'toml>=0.10.2'
+          'prometheus-client>=0.16.0',
+          'toml>=0.10.2',
       ],
       classifiers=[
-          'Development Status :: 3 - Alpha',
+          'Development Status :: 5 - Production/Stable',
           # Chose either "3 - Alpha", "4 - Beta" or "5 - Production/Stable" as the current state of your package
           'Intended Audience :: Developers',  # Define that your audience are developers
           'Topic :: Software Development :: Build Tools',

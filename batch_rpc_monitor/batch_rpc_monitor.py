@@ -8,6 +8,7 @@ from datetime import datetime, timedelta, timezone
 import aiohttp
 import aiohttp_jinja2
 import jinja2
+import prometheus_client
 import toml
 from aiohttp import web
 from batch_rpc_provider import BatchRpcProvider, BatchRpcException
@@ -236,6 +237,14 @@ async def status_endpoint(request):
             response_lines.append(f"{endpoint_label}_call_age.value {current_endpoint['call_age']}")
             response_lines.append(f"{endpoint_label}_block_age.value {current_endpoint['block_age']}")
         response = aiohttp.web.Response(text="\n".join(response_lines))
+    elif 'prometheus' in request.query:
+        for endpoint_label in context['status']:
+            current_endpoint = context['status'][endpoint_label]['current']
+            call_gauge = prometheus_client.Gauge(f"{endpoint_label}_call_age", "Seconds since last check")
+            block_gauge = prometheus_client.Gauge(f"{endpoint_label}_block_age", "Latest block age")
+            call_gauge.set(current_endpoint['call_age'])
+            block_gauge.set(current_endpoint['block_age'])
+        response = aiohttp.web.Response(body=prometheus_client.generate_latest())
     else:
         response = aiohttp_jinja2.render_template('status.jinja2',
                                               request,
