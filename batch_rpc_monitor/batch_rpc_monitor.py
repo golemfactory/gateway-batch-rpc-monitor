@@ -21,6 +21,8 @@ logger.setLevel(logging.DEBUG)
 parser = argparse.ArgumentParser(description='Golem multi monitor')
 parser.add_argument('--config-file', dest="config_file", type=str, help='Location of config', default="config-dev.toml")
 
+METRICS = {}  # Lazy initialized later
+
 
 async def burst_call(context, target_url, token_holder, token_address, number_calls):
     number_of_success_req = 0
@@ -240,10 +242,14 @@ async def status_endpoint(request):
     elif 'prometheus' in request.query:
         for endpoint_label in context['status']:
             current_endpoint = context['status'][endpoint_label]['current']
-            call_gauge = prometheus_client.Gauge(f"{endpoint_label.replace('-', '_')}_call_age", "Seconds since last check")
-            block_gauge = prometheus_client.Gauge(f"{endpoint_label.replace('-', '_')}_block_age", "Latest block age")
-            call_gauge.set(current_endpoint['call_age'])
-            block_gauge.set(current_endpoint['block_age'])
+            call_label = f"{endpoint_label.replace('-', '_')}_call_age"
+            block_label = f"{endpoint_label.replace('-', '_')}_block_age"
+            if call_label not in METRICS:
+                METRICS[call_label] = prometheus_client.Gauge(call_label, "Seconds since last check")
+            if block_label not in METRICS:
+                METRICS[block_label] = prometheus_client.Gauge(block_label, "Latest block age")
+            METRICS[call_label].set(current_endpoint['call_age'])
+            METRICS[block_label].set(current_endpoint['block_age'])
         response = aiohttp.web.Response(body=prometheus_client.generate_latest())
     else:
         response = aiohttp_jinja2.render_template('status.jinja2',
