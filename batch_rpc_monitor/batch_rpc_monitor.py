@@ -13,6 +13,7 @@ import toml
 from aiohttp import web
 from batch_rpc_provider import BatchRpcProvider, BatchRpcException
 from .client_info import ClientInfo, RequestType
+from ._version import __version__
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -273,6 +274,7 @@ async def main():
     app['context'] = {
         'config': config,
         'status': status,
+        'version': __version__,
     }
     aiohttp_jinja2.setup(app, loader=jinja2.FileSystemLoader('batch_rpc_monitor/templates'))
     app_task = asyncio.create_task(
