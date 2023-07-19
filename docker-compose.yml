@@ -8,3 +8,4 @@ services:
       - ${DATADIR}:/conf
     ports:
       - '${EXTERNAL_PORT}:8080'
+    restart: unless-stopped
